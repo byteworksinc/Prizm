@@ -1,0 +1,115 @@
+   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+
+0           0  @  P  `  p  Ä  ê  †  ∞  ¿  –
+1       !  1  A  Q  a  q  Å  ë  °  ±  ¡  —
+2       "  2  B  R  b  r  Ç  í  ¢  ≤  ¬  “
+3       #  3  C  S  c  s  É  ì  £  ≥  √  ”
+4       $  4  D  T  d  t  Ñ  î  §  ¥  ƒ  ‘
+5        %  5  E  U  e  u  Ö  ï  •  µ  ≈  ’
+6        &  6  F  V  f  v  Ü  ñ  ¶  ∂  ∆  ÷
+7        '  7  G  W  g  w  á  ó  ß  ∑  «  ◊
+8        (  8  H  X  h  x  à  ò  ®  ∏  »  ÿ
+9        )  9  I  Y  i  y  â  ô  ©  π  …
+A        *  :  J  Z  j  z  ä  ö  ™  ∫
+B        +  ;  K  [  k  {  ã  õ  ´  ª  À
+C        ,  <  L  \  l  |  å  ú  ¨  º  Ã
+D        _  =  M  ]  m  }  ç  ù  ≠  Ω  Õ
+E        .  >  N  ^  n  ~  é  û  Æ  æ  Œ  ﬁ
+F        /  ?  O  _  o     è  ü  Ø  ø  œ  ﬂ
+
+	control-Q
+	control-R
+	control-S
+	control-T
+Ä	option-u A
+Å	option-A
+Ç	option-C
+É	option-e E
+Ñ	option-n N
+Ö	option-u O
+Ü	option-u U
+á	option-e a
+à	option-` a
+â	option-i a
+ä	option-u a
+ã	option-n a
+å	option-a
+ç	option-c
+é	option-e e
+è	option-` e
+ê	option-i e
+ë	option-u e
+í	option-e i
+ì	option-` i
+î	option-i i
+ï	option-u i
+ñ	option-n n
+ó	option-e o
+ò	option-` o
+ô	option-i o
+ö	option-u o
+õ	option-n o
+ú	option-e u
+ù	option-` u
+û	option-i u
+ü	option-u u
+†	option-t
+°	option-*
+¢	option-4
+£	option-3
+§	option-6
+•	option-8
+¶	option-7
+ß	option-s
+®	option-r
+©	option-g
+™	option-2
+´	option-e (space)
+¨	option-u (space)
+≠	option-=
+Æ	option-"
+Ø	option-O
+∞	option-5
+±	option-+
+≤	option-,
+≥	option-.
+¥	option-y
+µ	option-m
+∂	option-d
+∑	option-W
+∏	option-P
+π	option-p
+∫	option-b
+ª	option-9
+º	option-0
+Ω	option-z
+æ	option-'
+ø	option-o
+¿	option-?
+¡	option-1
+¬	option-l
+√	option-v
+ƒ	option-f
+≈	option-x
+∆	option-j
+«	option-\
+»	option-|
+…	option-;
+	option-space (non-breaking space character)
+À	option-` A
+Ã	option-n A
+Õ	option-n O
+Œ	option-Q
+œ	option-q
+– 	option--
+— 	option-_
+“ 	option-[
+” 	option-{
+‘ 	option-]
+’ 	option-}
+÷ 	option-/
+◊ 	option-V
+ÿ 	option-u y
+ﬁ 	option-%
+ﬂ 	option-^
+

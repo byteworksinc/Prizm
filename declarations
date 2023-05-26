@@ -1,0 +1,128 @@
+const
+   vHeight	=	  9;		{height of a line in the var window}
+
+type
+					{Misc}
+					{----}
+   compKind = (thisWindow,diskFile);	{ways to compile a file}
+ 
+					{variables display}
+					{-----------------}
+   bytePtr = ^byte;			{for assignment compatibility}
+   entryArrayPtr = ^entryArray;
+   entryArray = record			{entry in a variable symbol table}
+      case boolean of
+	 true : (startVal,endVal,size: longint); {array index info}
+	 false: (name: pStringPtr;	{name of a variable}
+		 value: bytePtr; 	{pointer to variable value}
+		 longAddr: byte; 	{long addr or DP?}
+		 format: byte;		{format of variable}
+		 numSubscripts: integer; {# of subscripts or fields}
+		 );
+      end;
+ 
+					{base variable formats}
+   varFormats = (i1,i2,i4,r4,r8,r10,cStr,pStr,c1,b1,cp,p4,record1,derived,ptr4,bad);
+ 
+   refPtr = ^refRecord;			{for dereferencing addresses}
+   refRecord = record
+      next: refPtr;
+      offset: longint;
+      end;
+
+   varPtr = ^varRecord;			{variables window variable}
+   varRecord = record
+      last,next: varPtr; 		{doubly linked list}
+      expr: pStringPtr;			{expression in ASCII form}
+      vf: varFormats;			{type of variable}
+      addr: bytePtr;			{pointer to variable value}
+      ref: refPtr;			{dereference record (used when addr is a pointer)}
+      end;
+ 
+   procInfoPtr = ^procInfo;
+   procInfo = record
+      last,next: procInfoPtr;		{doubly linked list}
+      name: pStringPtr;			{name of this proc}
+      length: integer;			{length of the variable table}
+      symbols: entryArrayPtr;		{pointer to symbol table}
+      vars: varPtr;			{pointer to list of visible variables}
+      DP: integer;			{DP address on entry}
+      topVar,numVars: integer;		{top & # of variables in list}
+      end;
+ 
+					{profiler}
+					{--------}
+   subNamePtr = ^subName;		{name of a subroutine}
+   subName = string[10];
+ 
+   profilePtr = ^profileRecord;
+   profileRecord = record		{record for one subroutine}
+      heartbeats: longint;		{# heartbeats while active}
+      calls: longint;			{# calls}
+      name: subName;			{actual name for report}
+      namePtr: subNamePtr;		{ptr to name - for compares}
+      next: profilePtr;			{link}
+      end;
+ 
+   subPtr = ^subRecord;
+   subRecord = record			{subroutine call stack}
+      ptr: profilePtr;
+      next: subPtr;
+      end;
+ 
+   nameRecPtr = ^nameRec;		{file name stack}
+   nameRec = record
+      next: nameRecPtr;
+      name: gsosInString;
+      end;
+ 
+					{window list management}
+					{----------------------}
+   windowRecordPtr = ^windowRecord;	{pointer type for window list}
+   windowRecord = record
+      next: windowRecordPtr;		{next item in list}
+      owp: grafPortPtr;			{our window pointer}
+      end; {record}
+
+var
+					{misc}
+					{----}
+   lineNumber: integer;			{line number of trace; 0 if none}
+
+   linkRec: gsosInStringPtr;		{linker info}
+
+   ourMenu: boolean;			{are we using our menu bar?}
+ 
+   windowList: windowRecordPtr;		{list of our windows (during run only)}
+
+					{profiler}
+					{--------}
+   profileLink: profilePtr;		{head of profile list}
+   subLink: subPtr;			{head of subroutine chain}
+ 
+   nameList: nameRecPtr; 		{file name stack}
+
+					{variables display}
+					{-----------------}
+   currentProc: procInfoPtr;		{variable info about current proc}
+   procList: procInfoPtr;		{head of variables list}
+   vrHeaderChanged: boolean;		{has the header changed?}
+
+					{compilation}
+					{-----------}
+   eFile: gsosOutString;		{executable file name}
+   liDCB: getlInfoDCBGS;		{language info DCB}
+   loadSucceeded: boolean;		{loader success; set by LoadAndCall}
+   oldVector5: ptr;			{old cop vector}
+
+					{execute options}
+					{---------------}
+   executeMode: statusType;		{step/trace/go mode}
+   executeCommandLine: pString;		{command line}
+   commandLine: packed array[1..266] of char; {command line}
+
+					{linker AuxType options}
+                                        {----------------------}
+   gsosAware: boolean;			{is the application GS/OS aware?}
+   messageAware: boolean;		{is the application message genter aware?}
+   deskAware: boolean;			{is this a desktop application?}

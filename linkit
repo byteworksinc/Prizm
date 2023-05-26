@@ -1,0 +1,8 @@
+echo link obj/prism obj/find obj/print obj/run obj/buffer obj/orca obj/pcommon keep=prism
+link obj/prism obj/find obj/print obj/run obj/buffer obj/orca obj/pcommon keep=prism
+
+* echo purge
+* purge >14/temp
+
+echo prism
+prism

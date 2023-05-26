@@ -1,0 +1,5 @@
+set list        buffer.asm buffer.pas find.pas orca.asm orca.pas
+set list {list} orca.smac PCommon.asm pcommon.pas print.pas prism.asm
+set list {list} prism.pas prism.rez run.asm run.pas run.smac temp.asm
+
+wc -l {list}

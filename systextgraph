@@ -1,0 +1,81 @@
+****************************************************************
+*****************************************************************
+****************************************************************
+*
+SysGraphTextCommon privdata
+
+~textDev	ds	2	.CONSOLE device number
+	end
+
+****************************************************************
+*
+*  SysGraphTextShutdown - reverse the effects of SysGraphTextStartup
+*
+****************************************************************
+*
+SysGraphTextShutdown start
+	using	SysGraphTextCommon
+
+	lda	>~textDev	reset the default trap vectors
+	sta	>rtDevnum
+	DControlGS rtRec
+	rtl
+
+rtRec	dc	i'5'	DControl record for ResetTrap
+rtDevnum	ds	2
+	dc	i'$8007'
+	dc	a4'rtDummy'
+rtDummy	dc	i4'0'
+	ds	4
+	end
+
+****************************************************************
+*
+*  SysGraphTextStartup - send console output to the current window
+*
+*  Outputs:
+*	A - error code; 0 for none
+*
+****************************************************************
+*
+SysGraphTextStartup start
+	using	SysGraphTextCommon
+                               
+	GetDevNumberGS gdRec	get the device number for .CONSOLE
+	bcs	rtl
+	lda	>gdDevnum	set the various device number fields
+	sta	>~textDev
+	sta	>dcDevnum
+	jsl	SysGraphTextShutDown	reset the trap vector
+	DControlGS dcRec	set our own trap vector
+	bcs	rtl
+	lda	#0
+rtl	rtl
+
+gdRec	dc	i'2'	GetDevNumber record
+	dc	a4'console'
+gdDevnum	ds	2
+
+console	dc	i'l:consolec'	.console device name
+consolec	dc	c'.CONSOLE'
+
+dcRec	dc	i'5'	DControl call for SetTrap
+dcDevnum	ds	2
+	dc	i'$8006'
+	dc	a4'trap'
+	dc	i4'4'
+	ds	4
+
+trap	dc	a4'SysGraphTextTrap'
+	end
+
+****************************************************************
+*
+*  SysGraphTextTrap - .CONSOLE trap for graphics output
+*
+****************************************************************
+*
+SysGraphTextTrap private
+
+	rtl      
+	end
