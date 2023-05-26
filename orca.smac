@@ -1,1 +1,20 @@
-         macro&lab     str   &str&lab     dc    c"&str"         dc    i1'13'         mend	macro&l	dosw	&adr&l	dc	i"l:~&sysname&syscnt"~&sysname&syscnt dc c"&adr"	mend         MACRO&LAB     CHANGEVECTOR &DCB&LAB     JSL   $E100A8         DC    I2'$010C'         DC    I4'&DCB'         MEND
+         macro
+&lab     str   &str
+&lab     dc    c"&str"
+         dc    i1'13'
+         mend
+
+
+	macro
+&l	dosw	&adr
+&l	dc	i"l:~&sysname&syscnt"
+~&sysname&syscnt dc c"&adr"
+	mend
+
+
+         MACRO
+&LAB     CHANGEVECTOR &DCB
+&LAB     JSL   $E100A8
+         DC    I2'$010C'
+         DC    I4'&DCB'
+         MEND

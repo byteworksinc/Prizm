@@ -1,1 +1,966 @@
- MACRO&lab tool &num,&startupbytes,&shutdownbytes&lab dc i'&num' dc i1'&startupBytes,&shutDownBytes' mend MACRO&LAB PH2 &N1 LCLC &C&LAB ANOP&C AMID &N1,1,1 AIF "&C"="#",.D AIF S:LONGA=1,.A REP #%00100000.A AIF "&C"<>"{",.B&C AMID &N1,L:&N1,1 AIF "&C"<>"}",.G&N1 AMID &N1,2,L:&N1-2 LDA (&N1) PHA AGO .E.B LDA &N1 PHA AGO .E.D&N1 AMID &N1,2,L:&N1-1 PEA &N1 AGO .F.E AIF S:LONGA=1,.F SEP #%00100000.F MEXIT.G MNOTE "Missing closing '}'",16 MEND MACRO&LAB PH4 &N1 LCLC &C&LAB ANOP&C AMID &N1,1,1 AIF "&C"="#",.D AIF S:LONGA=1,.A REP #%00100000.A AIF "&C"<>"{",.B&C AMID &N1,L:&N1,1 AIF "&C"<>"}",.G&N1 AMID &N1,2,L:&N1-2 LDY #2 LDA (&N1),Y PHA LDA (&N1) PHA AGO .E.B AIF "&C"<>"[",.C LDY #2 LDA &N1,Y PHA LDA &N1 PHA AGO .E.C LDA &N1+2 PHA LDA &N1 PHA AGO .E.D&N1 AMID &N1,2,L:&N1-1 PEA +(&N1)|-16 PEA &N1 AGO .F.E AIF S:LONGA=1,.F SEP #%00100000.F MEXIT.G MNOTE "Missing closing '}'",16 MEND MACRO&lab subroutine &parms,&work&lab anop aif c:&work,.a lclc &work&work setc 0.a gbla &totallen gbla &worklen&worklen seta &work&totallen seta 0 aif c:&parms=0,.e lclc &len lclc &p lcla &i&i seta c:&parms.b&p setc &parms(&i)&len amid &p,2,1 aif "&len"=":",.c&len amid &p,1,2&p amid &p,4,l:&p-3 ago .d.c&len amid &p,1,1&p amid &p,3,l:&p-2.d&p equ &totallen+3+&work&totallen seta &totallen+&len&i seta &i-1 aif &i,^b.e tsc sec sbc #&work tcs inc a phd tcd mend MACRO&lab return &r&lab anop lclc &len aif c:&r,.a lclc &r&r setc 0&len setc 0 ago .h.a&len amid &r,2,1 aif "&len"=":",.b&len amid &r,1,2&r amid &r,4,l:&r-3 ago .c.b&len amid &r,1,1&r amid &r,3,l:&r-2.c aif &len<>2,.d ldy &r ago .h.d aif &len<>4,.e ldx &r+2 ldy &r ago .h.e aif &len<>10,.g aif &totallen=0,.f lda &worklen+1 sta &worklen+&totallen+1 lda &worklen sta &worklen+&totallen.f pld tsc clc adc #&worklen+&totallen tcs phb plx ply lda &r+8 pha lda &r+6 pha lda &r+4 pha lda &r+2 pha lda &r pha phy phx plb rtl mexit.g mnote 'Not a valid return length',16 mexit.h aif &totallen=0,.i lda &worklen+1 sta &worklen+&totallen+1 lda &worklen sta &worklen+&totallen.i pld tsc clc adc #&worklen+&totallen tcs aif &len=0,.j tya.j rtl mend MACRO&LAB LONG &A,&B LCLB &I LCLB &M&A AMID &A,1,1&M SETB "&A"="M"&I SETB "&A"="I" AIF C:&B=0,.A&B AMID &B,1,1&M SETB ("&B"="M").OR.&M&I SETB ("&B"="I").OR.&I.A&LAB REP #&M*32+&I*16 AIF .NOT.&M,.B LONGA ON.B AIF .NOT.&I,.C LONGI ON.C MEND MACRO&LAB SHORT &A,&B LCLB &I LCLB &M&A AMID &A,1,1&M SETB "&A"="M"&I SETB "&A"="I" AIF C:&B=0,.A&B AMID &B,1,1&M SETB ("&B"="M").OR.&M&I SETB ("&B"="I").OR.&I.A&LAB SEP #&M*32+&I*16 AIF .NOT.&M,.B LONGA OFF.B AIF .NOT.&I,.C LONGI OFF.C MEND MACRO&lab move4 &a,&b&lab lda &a sta &b lda 2+&a sta 2+&b mend MACRO&LAB _RESTART&LAB LDX #$0A11 JSL $E10000 MEND MACRO&LAB _USERSHUTDOWN&LAB LDX #$1211 JSL $E10000 MEND MACRO&LAB _STARTDRAWING&LAB LDX #$4D0E JSL $E10000 MEND MACRO&LAB _SETHEARTBEAT&LAB LDX #$1203 JSL $E10000 MEND MACRO&LAB _DELHEARTBEAT&LAB LDX #$1303 JSL $E10000 MEND MACRO&LAB JEQ &BP&LAB BNE *+5 BRL &BP MEND MACRO&LAB ADD2 &N1,&N2,&N3 AIF C:&N3,.A LCLC &N3&N3 SETC &N1.A&LAB ~SETM CLC ~LDA &N1 ~OP ADC,&N2 ~STA &N3 ~RESTM MEND MACRO&LAB ~SETM&LAB ANOP AIF C:&~LA,.B GBLB &~LA GBLB &~LI.B&~LA SETB S:LONGA&~LI SETB S:LONGI AIF S:LONGA.AND.S:LONGI,.A REP #32*(.NOT.&~LA)+16*(.NOT.&~LI) LONGA ON LONGI ON.A MEND MACRO&LAB ~RESTM&LAB ANOP AIF (&~LA+&~LI)=2,.I SEP #32*(.NOT.&~LA)+16*(.NOT.&~LI) AIF &~LA,.H LONGA OFF.H AIF &~LI,.I LONGI OFF.I MEND MACRO&LAB ~LDA &OP LCLC &C&C AMID "&OP",1,1 AIF "&C"<>"{",.B&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B&LAB LDA &OP MEND MACRO&LAB ~STA &OP LCLC &C&C AMID "&OP",1,1 AIF "&C"<>"{",.B&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B&LAB STA &OP MEND MACRO&LAB ~OP &OPC,&OP LCLC &C&C AMID "&OP",1,1 AIF "&C"<>"{",.B&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B&LAB &OPC &OP MEND MACRO&LAB _SYSBEEP&LAB LDX #$2C03 JSL $E10000 MEND MACRO&LAB JNE &BP&LAB BEQ *+5 BRL &BP MEND MACRO&LAB DW &ADR&LAB DC I1"L:SYSA&SYSCNT"SYSA&SYSCNT DC C"&ADR" MEND MACRO&LAB PL4 &N1 LCLC &C&LAB ANOP AIF S:LONGA=1,.A REP #%00100000.A&C AMID &N1,1,1 AIF "&C"<>"{",.B&C AMID &N1,L:&N1,1 AIF "&C"<>"}",.F&N1 AMID &N1,2,L:&N1-2 PLA STA (&N1) LDY #2 PLA STA (&N1),Y AGO .D.B AIF "&C"<>"[",.C PLA STA &N1 LDY #2 PLA STA &N1,Y AGO .D.C PLA STA &N1 PLA STA &N1+2.D AIF S:LONGA=1,.E SEP #%00100000.E MEXIT.F MNOTE "Missing closing '}'",16 MEND MACRO&LAB PL2 &N1 LCLC &C&LAB ANOP AIF S:LONGA=1,.A REP #%00100000.A&C AMID &N1,1,1 AIF "&C"<>"{",.B&C AMID &N1,L:&N1,1 AIF "&C"<>"}",.F&N1 AMID &N1,2,L:&N1-2 PLA STA (&N1) AGO .D.B PLA STA &N1.D AIF S:LONGA=1,.E SEP #%00100000.E MEXIT.F MNOTE "Missing closing '}'",16 MEND MACRO&LAB INC4 &A&LAB ~SETM INC &A BNE ~&SYSCNT INC 2+&A~&SYSCNT ~RESTM MEND MACRO&LAB ADD4 &M1,&M2,&M3 LCLB &YISTWO LCLC &C&LAB ~SETM AIF C:&M3,.A&C AMID "&M2",1,1 AIF "&C"<>"#",.A&C AMID "&M1",1,1 AIF "&C"="{",.A AIF "&C"="[",.A&C AMID "&M2",2,L:&M2-1 AIF &C>=65536,.A CLC ~LDA &M1 ~OP ADC,&M2 ~STA &M1 BCC ~&SYSCNT ~OP.H INC,&M1~&SYSCNT ANOP AGO .C.A AIF C:&M3,.B LCLC &M3&M3 SETC &M1.B CLC ~LDA &M1 ~OP ADC,&M2 ~STA &M3 ~LDA.H &M1 ~OP.H ADC,&M2 ~STA.H &M3.C ~RESTM MEND MACRO&LAB SUB4 &M1,&M2,&M3 LCLB &YISTWO LCLC &C&LAB ~SETM AIF C:&M3,.A&C AMID "&M2",1,1 AIF "&C"<>"#",.A&C AMID "&M1",1,1 AIF "&C"="{",.A AIF "&C"="[",.A&C AMID "&M2",2,L:&M2-1 AIF &C>=65536,.A SEC ~LDA &M1 ~OP SBC,&M2 ~STA &M1 BCS ~&SYSCNT ~OP.H DEC,&M1~&SYSCNT ANOP AGO .C.A AIF C:&M3,.B LCLC &M3&M3 SETC &M1.B SEC ~LDA &M1 ~OP SBC,&M2 ~STA &M3 ~LDA.H &M1 ~OP.H SBC,&M2 ~STA.H &M3.C ~RESTM MEND MACRO&LAB ~OP.H &OPC,&OP&LAB ANOP LCLC &C&C AMID "&OP",1,1 AIF "&C"="[",.B AIF "&C"<>"{",.D&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B AIF &YISTWO,.C&YISTWO SETB 1 LDY #2&OP SETC "&OP,Y".C &OPC &OP MEXIT.D AIF "&C"<>"#",.E&OP AMID "&OP",2,L:&OP-1&OP SETC "#^&OP" &OPC &OP MEXIT.E &OPC 2+&OP MEND MACRO&LAB ~LDA.H &OP&LAB ANOP LCLC &C&C AMID "&OP",1,1 AIF "&C"="[",.B AIF "&C"<>"{",.D&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B AIF &YISTWO,.C&YISTWO SETB 1 LDY #2&OP SETC "&OP,Y".C LDA &OP MEXIT.D AIF "&C"<>"#",.E&OP AMID "&OP",2,L:&OP-1&OP SETC "#^&OP" LDA &OP MEXIT.E LDA 2+&OP MEND MACRO&LAB ~STA.H &OP&LAB ANOP LCLC &C&C AMID "&OP",1,1 AIF "&C"="[",.B AIF "&C"<>"{",.D&C AMID "&OP",L:&OP,1 AIF "&C"="}",.A MNOTE "Missing closing '}'",2&OP SETC &OP}.A&OP AMID "&OP",2,L:&OP-2&OP SETC (&OP).B AIF &YISTWO,.C&YISTWO SETB 1 LDY #2&OP SETC "&OP,Y".C STA &OP MEXIT.D STA 2+&OP MEND MACRO&LAB _GETPORTRECT&LAB LDX #$2004 JSL $E10000 MEND MACRO&LAB _NEWHANDLE&LAB LDX #$0902 JSL $E10000 MEND MACRO&LAB JCS &BP&LAB BCC *+5 BRL &BP MEND MACRO&LAB _NEWWINDOW&LAB LDX #$090E JSL $E10000 MEND MACRO&LAB _SELECTWINDOW&LAB LDX #$110E JSL $E10000 MEND MACRO&LAB _SETCONTENTDRAW&LAB LDX #$490E JSL $E10000 MEND MACRO&LAB _LOADONETOOL&LAB LDX #$0F01 JSL $E10000 MEND MACRO&LAB _GETSYSBAR&LAB LDX #$110F JSL $E10000 MEND MACRO&LAB _SETSYSBAR&LAB LDX #$120F JSL $E10000 MEND MACRO&LAB _NEWMENUBAR&LAB LDX #$150F JSL $E10000 MEND MACRO&LAB _DRAWMENUBAR&LAB LDX #$2A0F JSL $E10000 MEND MACRO&LAB JCC &BP&LAB BCS *+5 BRL &BP MEND MACRO&LAB _FIXMENUBAR&LAB LDX #$130F JSL $E10000 MEND MACRO&LAB _SETMENUBAR&LAB LDX #$390F JSL $E10000 MEND MACRO&LAB _GETMENUBAR&LAB LDX #$0A0F JSL $E10000 MEND MACRO&LAB _READMOUSE&LAB LDX #$1703 JSL $E10000 MEND MACRO&LAB _HIDECURSOR&LAB LDX #$9004 JSL $E10000 MEND MACRO&LAB _SHOWCURSOR&LAB LDX #$9104 JSL $E10000 MEND MACRO&LAB _FLUSHEVENTS&LAB LDX #$1506 JSL $E10000 MEND MACRO&LAB _NEWCONTROL&LAB LDX #$0910 JSL $E10000 MEND MACRO&LAB _STARTINFODRAWING&LAB LDX #$500E JSL $E10000 MEND MACRO&LAB _ENDINFODRAWING&LAB LDX #$510E JSL $E10000 MEND MACRO&LAB _DISPOSEMENU&LAB LDX #$2E0F JSL $E10000 MEND MACRO&LAB _DISPOSEHANDLE&LAB LDX #$1002 JSL $E10000 MEND MACRO&LAB _WAITMOUSEUP&LAB LDX #$0F06 JSL $E10000 MEND MACRO&LAB _FINDWINDOW&LAB LDX #$170E JSL $E10000 MEND MACRO&LAB DEC4 &A&LAB ~SETM LDA &A BNE ~&SYSCNT DEC 2+&A~&SYSCNT DEC &A ~RESTM MEND MACRO&lab cmpl &n1,&n2&lab lda &n1+2 cmp &n2+2 bne ~&syscnt lda &n1 cmp &n2~&syscnt anop mend MACRO&LAB _WAITCURSOR&LAB LDX #$0A12 JSL $E10000 MEND MACRO&LAB _FRONTWINDOW&LAB LDX #$150E JSL $E10000 MEND MACRO&LAB _TASKMASTER&LAB LDX #$1D0E JSL $E10000 MEND MACRO&LAB _EVENTAVAIL&LAB LDX #$0B06 JSL $E10000 MEND MACRO&LAB _INVERTRECT&LAB LDX #$5604 JSL $E10000 MEND MACRO&LAB _SETPURGEALL&LAB LDX #$2502 JSL $E10000 MEND MACRO&LAB _SETVECTOR&LAB LDX #$1003 JSL $E10000 MEND MACRO&LAB _LOCALTOGLOBAL&LAB LDX #$8404 JSL $E10000 MEND MACRO&LAB _QDAUXSTARTUP&LAB LDX #$0212 JSL $E10000 MEND MACRO&LAB _TICKCOUNT&LAB LDX #$1006 JSL $E10000 MEND MACRO&LAB SUB2 &N1,&N2,&N3 AIF C:&N3,.A LCLC &N3&N3 SETC &N1.A&LAB ~SETM SEC ~LDA &N1 ~OP SBC,&N2 ~STA &N3 ~RESTM MEND MACRO&LAB _SETCTLVALUE&LAB LDX #$1910 JSL $E10000 MEND MACRO&LAB _HLOCK&LAB LDX #$2002 JSL $E10000 MEND MACRO&LAB LLA &AD1,&AD2&LAB ANOP LCLA &L LCLB &LA AIF S:LONGA,.A REP #%00100000 LONGA ON&LA SETB 1.A LDA #&AD2&L SETA C:&AD1.B STA &AD1(&L)&L SETA &L-1 AIF &L,^B LDA #^&AD2&L SETA C:&AD1.C STA 2+&AD1(&L)&L SETA &L-1 AIF &L,^C AIF &LA=0,.D SEP #%00100000 LONGA OFF.D MEND macro&l dstatusgs &p&l jsl $E100A8 dc i2'$202D' dc i4'&p' mend macro&l getdevnumbergs &p&l jsl $E100A8 dc i2'$2020' dc i4'&p' mend MACRO&lab _GetNextEvent&lab ldx #$0A06 jsl $E10000 MEND MACRO&lab _ShutDownTools&lab ldx #$1901 jsl $E10000 MEND macro&l dosw &adr&l dc i"l:~&sysname&syscnt"~&sysname&syscnt dc c"&adr" mend macro&l getfileinfogs &p&l jsl $E100A8 dc i2'$2006' dc i4'&p' mend macro&l getprefixgs &p&l jsl $E100A8 dc i2'$200A' dc i4'&p' mend macro&l quitgs &p&l jsl $E100A8 dc i2'$2029' dc i4'&p' mend macro&l setprefixgs &p&l jsl $E100A8 dc i2'$2009' dc i4'&p' mend macro&l setgs &p&l ~setm jsl $E100A8 dc i2'$0146' dc i4'&p' ~restm mend macro&l executegs &p&l ~setm jsl $E100A8 dc i2'$014D' dc i4'&p' ~restm mend macro&l fastfilegs &p&l ~setm jsl $E100A8 dc i2'$014E' dc i4'&p' ~restm mend MACRO&lab _InitialLoad2&lab ldx #$2011 jsl $E10000 MEND macro&l closegs &p&l jsl $E100A8 dc i2'$2014' dc i4'&p' mend macro&l getlevelgs &p&l jsl $E100A8 dc i2'$201B' dc i4'&p' mend macro&l setlevelgs &p&l jsl $E100A8 dc i2'$201A' dc i4'&p' mend MACRO&lab _GetUserID2&lab ldx #$2111 jsl $E10000 MEND MACRO&lab _FindHandle&lab ldx #$1A02 jsl $E10000 MEND
+ MACRO
+&lab tool &num,&startupbytes,&shutdownbytes
+&lab dc i'&num'
+ dc i1'&startupBytes,&shutDownBytes'
+ mend
+ MACRO
+&LAB PH2 &N1
+ LCLC &C
+&LAB ANOP
+&C AMID &N1,1,1
+ AIF "&C"="#",.D
+ AIF S:LONGA=1,.A
+ REP #%00100000
+.A
+ AIF "&C"<>"{",.B
+&C AMID &N1,L:&N1,1
+ AIF "&C"<>"}",.G
+&N1 AMID &N1,2,L:&N1-2
+ LDA (&N1)
+ PHA
+ AGO .E
+.B
+ LDA &N1
+ PHA
+ AGO .E
+.D
+&N1 AMID &N1,2,L:&N1-1
+ PEA &N1
+ AGO .F
+.E
+ AIF S:LONGA=1,.F
+ SEP #%00100000
+.F
+ MEXIT
+.G
+ MNOTE "Missing closing '}'",16
+ MEND
+ MACRO
+&LAB PH4 &N1
+ LCLC &C
+&LAB ANOP
+&C AMID &N1,1,1
+ AIF "&C"="#",.D
+ AIF S:LONGA=1,.A
+ REP #%00100000
+.A
+ AIF "&C"<>"{",.B
+&C AMID &N1,L:&N1,1
+ AIF "&C"<>"}",.G
+&N1 AMID &N1,2,L:&N1-2
+ LDY #2
+ LDA (&N1),Y
+ PHA
+ LDA (&N1)
+ PHA
+ AGO .E
+.B
+ AIF "&C"<>"[",.C
+ LDY #2
+ LDA &N1,Y
+ PHA
+ LDA &N1
+ PHA
+ AGO .E
+.C
+ LDA &N1+2
+ PHA
+ LDA &N1
+ PHA
+ AGO .E
+.D
+&N1 AMID &N1,2,L:&N1-1
+ PEA +(&N1)|-16
+ PEA &N1
+ AGO .F
+.E
+ AIF S:LONGA=1,.F
+ SEP #%00100000
+.F
+ MEXIT
+.G
+ MNOTE "Missing closing '}'",16
+ MEND
+ MACRO
+&lab subroutine &parms,&work
+&lab anop
+ aif c:&work,.a
+ lclc &work
+&work setc 0
+.a
+ gbla &totallen
+ gbla &worklen
+&worklen seta &work
+&totallen seta 0
+ aif c:&parms=0,.e
+ lclc &len
+ lclc &p
+ lcla &i
+&i seta c:&parms
+.b
+&p setc &parms(&i)
+&len amid &p,2,1
+ aif "&len"=":",.c
+&len amid &p,1,2
+&p amid &p,4,l:&p-3
+ ago .d
+.c
+&len amid &p,1,1
+&p amid &p,3,l:&p-2
+.d
+&p equ &totallen+3+&work
+&totallen seta &totallen+&len
+&i seta &i-1
+ aif &i,^b
+.e
+ tsc
+ sec
+ sbc #&work
+ tcs
+ inc a
+ phd
+ tcd
+ mend
+ MACRO
+&lab return &r
+&lab anop
+ lclc &len
+ aif c:&r,.a
+ lclc &r
+&r setc 0
+&len setc 0
+ ago .h
+.a
+&len amid &r,2,1
+ aif "&len"=":",.b
+&len amid &r,1,2
+&r amid &r,4,l:&r-3
+ ago .c
+.b
+&len amid &r,1,1
+&r amid &r,3,l:&r-2
+.c
+ aif &len<>2,.d
+ ldy &r
+ ago .h
+.d
+ aif &len<>4,.e
+ ldx &r+2
+ ldy &r
+ ago .h
+.e
+ aif &len<>10,.g
+ aif &totallen=0,.f
+ lda &worklen+1
+ sta &worklen+&totallen+1
+ lda &worklen
+ sta &worklen+&totallen
+.f
+ pld
+ tsc
+ clc
+ adc #&worklen+&totallen
+ tcs
+ phb
+ plx
+ ply
+ lda &r+8
+ pha
+ lda &r+6
+ pha
+ lda &r+4
+ pha
+ lda &r+2
+ pha
+ lda &r
+ pha
+ phy
+ phx
+ plb
+ rtl
+ mexit
+.g
+ mnote 'Not a valid return length',16
+ mexit
+.h
+ aif &totallen=0,.i
+ lda &worklen+1
+ sta &worklen+&totallen+1
+ lda &worklen
+ sta &worklen+&totallen
+.i
+ pld
+ tsc
+ clc
+ adc #&worklen+&totallen
+ tcs
+ aif &len=0,.j
+ tya
+.j
+ rtl
+ mend
+ MACRO
+&LAB LONG &A,&B
+ LCLB &I
+ LCLB &M
+&A AMID &A,1,1
+&M SETB "&A"="M"
+&I SETB "&A"="I"
+ AIF C:&B=0,.A
+&B AMID &B,1,1
+&M SETB ("&B"="M").OR.&M
+&I SETB ("&B"="I").OR.&I
+.A
+&LAB REP #&M*32+&I*16
+ AIF .NOT.&M,.B
+ LONGA ON
+.B
+ AIF .NOT.&I,.C
+ LONGI ON
+.C
+ MEND
+ MACRO
+&LAB SHORT &A,&B
+ LCLB &I
+ LCLB &M
+&A AMID &A,1,1
+&M SETB "&A"="M"
+&I SETB "&A"="I"
+ AIF C:&B=0,.A
+&B AMID &B,1,1
+&M SETB ("&B"="M").OR.&M
+&I SETB ("&B"="I").OR.&I
+.A
+&LAB SEP #&M*32+&I*16
+ AIF .NOT.&M,.B
+ LONGA OFF
+.B
+ AIF .NOT.&I,.C
+ LONGI OFF
+.C
+ MEND
+ MACRO
+&lab move4 &a,&b
+&lab lda &a
+ sta &b
+ lda 2+&a
+ sta 2+&b
+ mend
+ MACRO
+&LAB _RESTART
+&LAB LDX #$0A11
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _USERSHUTDOWN
+&LAB LDX #$1211
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _STARTDRAWING
+&LAB LDX #$4D0E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETHEARTBEAT
+&LAB LDX #$1203
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _DELHEARTBEAT
+&LAB LDX #$1303
+ JSL $E10000
+ MEND
+ MACRO
+&LAB JEQ &BP
+&LAB BNE *+5
+ BRL &BP
+ MEND
+ MACRO
+&LAB ADD2 &N1,&N2,&N3
+ AIF C:&N3,.A
+ LCLC &N3
+&N3 SETC &N1
+.A
+&LAB ~SETM
+ CLC
+ ~LDA &N1
+ ~OP ADC,&N2
+ ~STA &N3
+ ~RESTM
+ MEND
+ MACRO
+&LAB ~SETM
+&LAB ANOP
+ AIF C:&~LA,.B
+ GBLB &~LA
+ GBLB &~LI
+.B
+&~LA SETB S:LONGA
+&~LI SETB S:LONGI
+ AIF S:LONGA.AND.S:LONGI,.A
+ REP #32*(.NOT.&~LA)+16*(.NOT.&~LI)
+ LONGA ON
+ LONGI ON
+.A
+ MEND
+ MACRO
+&LAB ~RESTM
+&LAB ANOP
+ AIF (&~LA+&~LI)=2,.I
+ SEP #32*(.NOT.&~LA)+16*(.NOT.&~LI)
+ AIF &~LA,.H
+ LONGA OFF
+.H
+ AIF &~LI,.I
+ LONGI OFF
+.I
+ MEND
+ MACRO
+&LAB ~LDA &OP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"<>"{",.B
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+&LAB LDA &OP
+ MEND
+ MACRO
+&LAB ~STA &OP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"<>"{",.B
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+&LAB STA &OP
+ MEND
+ MACRO
+&LAB ~OP &OPC,&OP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"<>"{",.B
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+&LAB &OPC &OP
+ MEND
+ MACRO
+&LAB _SYSBEEP
+&LAB LDX #$2C03
+ JSL $E10000
+ MEND
+ MACRO
+&LAB JNE &BP
+&LAB BEQ *+5
+ BRL &BP
+ MEND
+ MACRO
+&LAB DW &ADR
+&LAB DC I1"L:SYSA&SYSCNT"
+SYSA&SYSCNT DC C"&ADR"
+ MEND
+ MACRO
+&LAB PL4 &N1
+ LCLC &C
+&LAB ANOP
+ AIF S:LONGA=1,.A
+ REP #%00100000
+.A
+&C AMID &N1,1,1
+ AIF "&C"<>"{",.B
+&C AMID &N1,L:&N1,1
+ AIF "&C"<>"}",.F
+&N1 AMID &N1,2,L:&N1-2
+ PLA
+ STA (&N1)
+ LDY #2
+ PLA
+ STA (&N1),Y
+ AGO .D
+.B
+ AIF "&C"<>"[",.C
+ PLA
+ STA &N1
+ LDY #2
+ PLA
+ STA &N1,Y
+ AGO .D
+.C
+ PLA
+ STA &N1
+ PLA
+ STA &N1+2
+.D
+ AIF S:LONGA=1,.E
+ SEP #%00100000
+.E
+ MEXIT
+.F
+ MNOTE "Missing closing '}'",16
+ MEND
+ MACRO
+&LAB PL2 &N1
+ LCLC &C
+&LAB ANOP
+ AIF S:LONGA=1,.A
+ REP #%00100000
+.A
+&C AMID &N1,1,1
+ AIF "&C"<>"{",.B
+&C AMID &N1,L:&N1,1
+ AIF "&C"<>"}",.F
+&N1 AMID &N1,2,L:&N1-2
+ PLA
+ STA (&N1)
+ AGO .D
+.B
+ PLA
+ STA &N1
+.D
+ AIF S:LONGA=1,.E
+ SEP #%00100000
+.E
+ MEXIT
+.F
+ MNOTE "Missing closing '}'",16
+ MEND
+ MACRO
+&LAB INC4 &A
+&LAB ~SETM
+ INC &A
+ BNE ~&SYSCNT
+ INC 2+&A
+~&SYSCNT ~RESTM
+ MEND
+ MACRO
+&LAB ADD4 &M1,&M2,&M3
+ LCLB &YISTWO
+ LCLC &C
+&LAB ~SETM
+ AIF C:&M3,.A
+&C AMID "&M2",1,1
+ AIF "&C"<>"#",.A
+&C AMID "&M1",1,1
+ AIF "&C"="{",.A
+ AIF "&C"="[",.A
+&C AMID "&M2",2,L:&M2-1
+ AIF &C>=65536,.A
+ CLC
+ ~LDA &M1
+ ~OP ADC,&M2
+ ~STA &M1
+ BCC ~&SYSCNT
+ ~OP.H INC,&M1
+~&SYSCNT ANOP
+ AGO .C
+.A
+ AIF C:&M3,.B
+ LCLC &M3
+&M3 SETC &M1
+.B
+ CLC
+ ~LDA &M1
+ ~OP ADC,&M2
+ ~STA &M3
+ ~LDA.H &M1
+ ~OP.H ADC,&M2
+ ~STA.H &M3
+.C
+ ~RESTM
+ MEND
+ MACRO
+&LAB SUB4 &M1,&M2,&M3
+ LCLB &YISTWO
+ LCLC &C
+&LAB ~SETM
+ AIF C:&M3,.A
+&C AMID "&M2",1,1
+ AIF "&C"<>"#",.A
+&C AMID "&M1",1,1
+ AIF "&C"="{",.A
+ AIF "&C"="[",.A
+&C AMID "&M2",2,L:&M2-1
+ AIF &C>=65536,.A
+ SEC
+ ~LDA &M1
+ ~OP SBC,&M2
+ ~STA &M1
+ BCS ~&SYSCNT
+ ~OP.H DEC,&M1
+~&SYSCNT ANOP
+ AGO .C
+.A
+ AIF C:&M3,.B
+ LCLC &M3
+&M3 SETC &M1
+.B
+ SEC
+ ~LDA &M1
+ ~OP SBC,&M2
+ ~STA &M3
+ ~LDA.H &M1
+ ~OP.H SBC,&M2
+ ~STA.H &M3
+.C
+ ~RESTM
+ MEND
+ MACRO
+&LAB ~OP.H &OPC,&OP
+&LAB ANOP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"="[",.B
+ AIF "&C"<>"{",.D
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+ AIF &YISTWO,.C
+&YISTWO SETB 1
+ LDY #2
+&OP SETC "&OP,Y"
+.C
+ &OPC &OP
+ MEXIT
+.D
+ AIF "&C"<>"#",.E
+&OP AMID "&OP",2,L:&OP-1
+&OP SETC "#^&OP"
+ &OPC &OP
+ MEXIT
+.E
+ &OPC 2+&OP
+ MEND
+ MACRO
+&LAB ~LDA.H &OP
+&LAB ANOP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"="[",.B
+ AIF "&C"<>"{",.D
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+ AIF &YISTWO,.C
+&YISTWO SETB 1
+ LDY #2
+&OP SETC "&OP,Y"
+.C
+ LDA &OP
+ MEXIT
+.D
+ AIF "&C"<>"#",.E
+&OP AMID "&OP",2,L:&OP-1
+&OP SETC "#^&OP"
+ LDA &OP
+ MEXIT
+.E
+ LDA 2+&OP
+ MEND
+ MACRO
+&LAB ~STA.H &OP
+&LAB ANOP
+ LCLC &C
+&C AMID "&OP",1,1
+ AIF "&C"="[",.B
+ AIF "&C"<>"{",.D
+&C AMID "&OP",L:&OP,1
+ AIF "&C"="}",.A
+ MNOTE "Missing closing '}'",2
+&OP SETC &OP}
+.A
+&OP AMID "&OP",2,L:&OP-2
+&OP SETC (&OP)
+.B
+ AIF &YISTWO,.C
+&YISTWO SETB 1
+ LDY #2
+&OP SETC "&OP,Y"
+.C
+ STA &OP
+ MEXIT
+.D
+ STA 2+&OP
+ MEND
+ MACRO
+&LAB _GETPORTRECT
+&LAB LDX #$2004
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _NEWHANDLE
+&LAB LDX #$0902
+ JSL $E10000
+ MEND
+ MACRO
+&LAB JCS &BP
+&LAB BCC *+5
+ BRL &BP
+ MEND
+ MACRO
+&LAB _NEWWINDOW
+&LAB LDX #$090E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SELECTWINDOW
+&LAB LDX #$110E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETCONTENTDRAW
+&LAB LDX #$490E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _LOADONETOOL
+&LAB LDX #$0F01
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _GETSYSBAR
+&LAB LDX #$110F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETSYSBAR
+&LAB LDX #$120F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _NEWMENUBAR
+&LAB LDX #$150F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _DRAWMENUBAR
+&LAB LDX #$2A0F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB JCC &BP
+&LAB BCS *+5
+ BRL &BP
+ MEND
+ MACRO
+&LAB _FIXMENUBAR
+&LAB LDX #$130F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETMENUBAR
+&LAB LDX #$390F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _GETMENUBAR
+&LAB LDX #$0A0F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _READMOUSE
+&LAB LDX #$1703
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _HIDECURSOR
+&LAB LDX #$9004
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SHOWCURSOR
+&LAB LDX #$9104
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _FLUSHEVENTS
+&LAB LDX #$1506
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _NEWCONTROL
+&LAB LDX #$0910
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _STARTINFODRAWING
+&LAB LDX #$500E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _ENDINFODRAWING
+&LAB LDX #$510E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _DISPOSEMENU
+&LAB LDX #$2E0F
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _DISPOSEHANDLE
+&LAB LDX #$1002
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _WAITMOUSEUP
+&LAB LDX #$0F06
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _FINDWINDOW
+&LAB LDX #$170E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB DEC4 &A
+&LAB ~SETM
+ LDA &A
+ BNE ~&SYSCNT
+ DEC 2+&A
+~&SYSCNT DEC &A
+ ~RESTM
+ MEND
+ MACRO
+&lab cmpl &n1,&n2
+&lab lda &n1+2
+ cmp &n2+2
+ bne ~&syscnt
+ lda &n1
+ cmp &n2
+~&syscnt anop
+ mend
+ MACRO
+&LAB _WAITCURSOR
+&LAB LDX #$0A12
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _FRONTWINDOW
+&LAB LDX #$150E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _TASKMASTER
+&LAB LDX #$1D0E
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _EVENTAVAIL
+&LAB LDX #$0B06
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _INVERTRECT
+&LAB LDX #$5604
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETPURGEALL
+&LAB LDX #$2502
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _SETVECTOR
+&LAB LDX #$1003
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _LOCALTOGLOBAL
+&LAB LDX #$8404
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _QDAUXSTARTUP
+&LAB LDX #$0212
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _TICKCOUNT
+&LAB LDX #$1006
+ JSL $E10000
+ MEND
+ MACRO
+&LAB SUB2 &N1,&N2,&N3
+ AIF C:&N3,.A
+ LCLC &N3
+&N3 SETC &N1
+.A
+&LAB ~SETM
+ SEC
+ ~LDA &N1
+ ~OP SBC,&N2
+ ~STA &N3
+ ~RESTM
+ MEND
+ MACRO
+&LAB _SETCTLVALUE
+&LAB LDX #$1910
+ JSL $E10000
+ MEND
+ MACRO
+&LAB _HLOCK
+&LAB LDX #$2002
+ JSL $E10000
+ MEND
+ MACRO
+&LAB LLA &AD1,&AD2
+&LAB ANOP
+ LCLA &L
+ LCLB &LA
+ AIF S:LONGA,.A
+ REP #%00100000
+ LONGA ON
+&LA SETB 1
+.A
+ LDA #&AD2
+&L SETA C:&AD1
+.B
+ STA &AD1(&L)
+&L SETA &L-1
+ AIF &L,^B
+ LDA #^&AD2
+&L SETA C:&AD1
+.C
+ STA 2+&AD1(&L)
+&L SETA &L-1
+ AIF &L,^C
+ AIF &LA=0,.D
+ SEP #%00100000
+ LONGA OFF
+.D
+ MEND
+ macro
+&l dstatusgs &p
+&l jsl $E100A8
+ dc i2'$202D'
+ dc i4'&p'
+ mend
+ macro
+&l getdevnumbergs &p
+&l jsl $E100A8
+ dc i2'$2020'
+ dc i4'&p'
+ mend
+ MACRO
+&lab _GetNextEvent
+&lab ldx #$0A06
+ jsl $E10000
+ MEND
+ MACRO
+&lab _ShutDownTools
+&lab ldx #$1901
+ jsl $E10000
+ MEND
+ macro
+&l dosw &adr
+&l dc i"l:~&sysname&syscnt"
+~&sysname&syscnt dc c"&adr"
+ mend
+ macro
+&l getfileinfogs &p
+&l jsl $E100A8
+ dc i2'$2006'
+ dc i4'&p'
+ mend
+ macro
+&l getprefixgs &p
+&l jsl $E100A8
+ dc i2'$200A'
+ dc i4'&p'
+ mend
+ macro
+&l quitgs &p
+&l jsl $E100A8
+ dc i2'$2029'
+ dc i4'&p'
+ mend
+ macro
+&l setprefixgs &p
+&l jsl $E100A8
+ dc i2'$2009'
+ dc i4'&p'
+ mend
+ macro
+&l setgs &p
+&l ~setm
+ jsl $E100A8
+ dc i2'$0146'
+ dc i4'&p'
+ ~restm
+ mend
+ macro
+&l executegs &p
+&l ~setm
+ jsl $E100A8
+ dc i2'$014D'
+ dc i4'&p'
+ ~restm
+ mend
+ macro
+&l fastfilegs &p
+&l ~setm
+ jsl $E100A8
+ dc i2'$014E'
+ dc i4'&p'
+ ~restm
+ mend
+ MACRO
+&lab _InitialLoad2
+&lab ldx #$2011
+ jsl $E10000
+ MEND
+ macro
+&l closegs &p
+&l jsl $E100A8
+ dc i2'$2014'
+ dc i4'&p'
+ mend
+ macro
+&l getlevelgs &p
+&l jsl $E100A8
+ dc i2'$201B'
+ dc i4'&p'
+ mend
+ macro
+&l setlevelgs &p
+&l jsl $E100A8
+ dc i2'$201A'
+ dc i4'&p'
+ mend
+ MACRO
+&lab _GetUserID2
+&lab ldx #$2111
+ jsl $E10000
+ MEND
+ MACRO
+&lab _FindHandle
+&lab ldx #$1A02
+ jsl $E10000
+ MEND
