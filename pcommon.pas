@@ -156,6 +156,7 @@ var
 					{----}
    msg: pString; 			{for building alert messages}
    startStopParm: longint;              {tool start/shutdown parameter}
+   screenPtr: ptr;                      {pointer to screen memory}
 
 					{window & menu numbering}
 					{-----------------------}

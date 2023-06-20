@@ -156,6 +156,15 @@ begin {InitScalars}
 windowMenuList := nil;			{no windows in the list}
 end; {InitScalars}
 
+
+procedure GetScreenPointer;
+
+{ Get a pointer to screen memory				}
+
+begin {GetScreenPointer}
+screenPtr := GetPort^.portInfo.ptrToPixelImage;
+end; {GetScreenPointer}
+
 {-- Main program --------------------------------------------------------------}
 
 begin {Prism}
@@ -164,6 +173,7 @@ startStopParm :=                        {start up the tools}
    StartUpTools(userID, 2, base+1);
 if ToolError <> 0 then
    SysFailMgr(ToolError, @'Could not start tools: ');
+GetScreenPointer;			{get pointer to screen memory}
 InstallIntercepts;			{install shell intercepts}
 SetPenMode(0);				{set pen mode to copy}
 InitMenus;				{set up the menu bar}

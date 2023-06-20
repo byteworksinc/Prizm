@@ -342,6 +342,12 @@ dc7	sty	disp
 	bne	qd1
 	cpx	currentFile+wPtr+2
 	bne	qd1
+	lda	screenPtr
+	cmp	#$2000
+	bne	qd1
+	lda	screenPtr+2
+	cmp	#$00E1
+	bne	qd1
 	jsr	OnScreen
 	jcs	fs1
 ;
@@ -710,6 +716,12 @@ dc1	pha		use QuickDraw if we are not drawing
 	cmp	wp
 	bne	qd1
 	cpx	wp+2
+	bne	qd1
+	lda	screenPtr
+	cmp	#$2000
+	bne	qd1
+	lda	screenPtr+2
+	cmp	#$00E1
 	bne	qd1
 	jsr	OnScreen
 	jcs	fs1

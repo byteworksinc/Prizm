@@ -686,36 +686,63 @@ dc1	anop		endif
 ****************************************************************
 *
 DrawIcons private
+screen	equ	1	pointer to screen memory
+
+	phd		get pointer to screen memory
+	lda	>screenPtr+2
+	pha
+	lda	>screenPtr
+	pha
+	tsc
+	tcd
 
 	_HideCursor
-	ldx	#144+320
-	ldy	#0
-lb1	lda	icons,Y
-	sta	$E12000,X
-	lda	icons+2,Y
-	sta	$E12002,X
-	lda	icons+4,Y
-	sta	$E12004,X
-	lda	icons+6,Y
-	sta	$E12006,X
-	lda	icons+8,Y
-	sta	$E12008,X
-	lda	icons+10,Y
-	sta	$E1200A,X
-	lda	icons+12,Y
-	sta	$E1200C,X
-	lda	icons+14,Y
-	sta	$E1200E,X
-	txa
-	clc
-	adc	#160
-	tax
+	ldy	#144+320
+	ldx	#0
+lb1	lda	icons,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+2,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+4,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+6,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+8,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+10,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+12,X
+	sta	[screen],Y
+	iny
+	iny
+	lda	icons+14,X
+	sta	[screen],Y
 	tya
-	adc	#16
+	clc
+	adc	#160-14
 	tay
-	cpy	#16*9
+	txa
+	adc	#16
+	tax
+	cpx	#16*9
 	bne	lb1
 	_ShowCursor
+	
+	pla
+	pla
+	pld
 	rts
 
 icons	dc	h'FFFFFFC003FFFFFF FFFFF0FFFF0FFFFC'
@@ -3154,28 +3181,44 @@ Invert	pha		hide the cursor
 	dec	a	return if area is not an icon
 	bmi	in4
 	beq	in1	set the initial index
-	ldx	#160+152
+	ldy	#160+152
 	bra	in2
-in1	ldx	#160+144
-in2	ldy	#11	invert the icon
-in3	lda	$E12000,X
+in1	ldy	#160+144
+in2	phd		get pointer to screen memory
+	lda	>screenPtr+2
+	pha
+	lda	>screenPtr
+	pha
+	tsc
+	tcd
+	ldx	#11	invert the icon
+in3	lda	[1],Y
 	eor	#$FFFF
-	sta	$E12000,X
-	lda	$E12002,X
+	sta	[1],Y
+	iny
+	iny
+	lda	[1],Y
 	eor	#$FFFF
-	sta	$E12002,X
-	lda	$E12004,X
+	sta	[1],Y
+	iny
+	iny
+	lda	[1],Y
 	eor	#$FFFF
-	sta	$E12004,X
-	lda	$E12006,X
+	sta	[1],Y
+	iny
+	iny
+	lda	[1],Y
 	eor	#$FFFF
-	sta	$E12006,X
-	txa
+	sta	[1],Y
+	tya
 	clc
-	adc	#160
-	tax
-	dey
+	adc	#160-6
+	tay
+	dex
 	bne	in3
+	pla
+	pla
+	pld
 in4	_ShowCursor	bring back the cursor
 	rts
 
