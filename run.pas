@@ -449,7 +449,7 @@ if currentProc <> nil then begin 	{draw the procedure name}
    SetForeColor(0);
    SetBackColor(15);
    MoveTo(49,r.v1+8);
-   DrawString(currentProc^.name);
+   DrawStringWidth(dswCondense+dswTruncRight, currentProc^.name, r.h2-50);
    end; {if}
 end; {VrInfo}
 
@@ -531,7 +531,7 @@ var
 	 new(str);			{get a work string}
 	 while (max <> 0) and (vp <> nil) do begin
 	    MoveTo(2,vpt);		{draw the var name}
-	    DrawString(vp^.expr);
+	    DrawStringWidth(dswCondense+dswTruncRight, vp^.expr, 95);
 	    r2.v1 := vpt-8;		{erase the old value}
 	    r2.v2 := r2.v1+vHeight;
 	    r2.h1 := 2+StringWidth(vp^.expr);
@@ -598,9 +598,7 @@ var
 		  end;
 	       otherwise: str^ := '(invalid expression)';
 	       end; {case}
-	    while StringWidth(str)+98+25 >= r.h2 do
-	       str^[0] := chr(ord(str^[0])-1);
-	    DrawString(str);
+	    DrawStringWidth(dswCondense+dswTruncRight, str, r.h2-(98+25+1));
 	    r2.h1 := 98+StringWidth(str);
 	    r2.h2 := r.h2-25;
 	    EraseRect(r2);
