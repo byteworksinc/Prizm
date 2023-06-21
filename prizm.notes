@@ -81,6 +81,8 @@ The only limit to the number of files that can be opened is available memory.
 
 (Luigi Thirty and others)
 
+2. Profile reports could print garbage if a subroutine name was longer than ten characters.  Now they do not, although subroutine names are still truncated to ten characters in the report.
+
 -- Bugs from PRIZM 2.0.3 that have been fixed -------------------------------
 
 1.  Ctrl-@ was not accepted as an end of file character from the Shell window.

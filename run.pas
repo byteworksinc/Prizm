@@ -229,7 +229,7 @@ type
       heartbeats: longint;		{# heartbeats while active}
       calls: longint;			{# calls}
       name: subName;			{actual name for report}
-      namePtr: subNamePtr;		{ptr to name - for compares}
+      namePtr: pStringPtr;		{ptr to name - for compares}
       next: profilePtr;			{link}
       end;
  
@@ -1648,7 +1648,7 @@ DrawControls(wp);
 end; {CreateSpecialControls}
 
 
-procedure ProfileCall (pname: subNamePtr);
+procedure ProfileCall (pname: pStringPtr);
 
 { add a call to the profile list 				}
 {								}
