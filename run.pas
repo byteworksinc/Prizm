@@ -500,6 +500,8 @@ var
       longintPtr = ^longint;
       realPtr = ^real;
       doublePtr = ^double;
+      extendedPtr = ^extended;
+      compPtr = ^comp;
       cString = packed array[1..255] of char;
       cStringPtr = ^cString;
       charPtr = ^byte;
@@ -576,7 +578,12 @@ var
                      str^ := cnvis(longintPtr(addr)^);
 	       r4: str^ := cnvrs(realPtr(addr)^,1,0);
 	       r8: str^ := cnvrs(doublePtr(addr)^,1,0);
-	       r10: str^ := '**.***';
+	       r10: str^ := cnvrs(extendedPtr(addr)^,1,0);
+	       cp: begin
+	          str^ := cnvrs(compPtr(addr)^,1,1);
+	          if compPtr(addr)^ = compPtr(addr)^ then
+	             str^[0] := chr(ord(str^[0]) - 2);
+	          end;
 	       cStr: str^ := cStringPtr(addr)^;
 	       pStr: str^ := pStringPtr(addr)^;
 	       c1: str^ := chr(charPtr(addr)^);
