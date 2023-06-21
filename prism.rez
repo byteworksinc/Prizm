@@ -40,6 +40,7 @@
 #define edit_Paste		253
 #define edit_Clear		254
 #define edit_SelectAll		285
+#define edit_ShowClipboard	286
 
 #define windows_Tile		300
 #define windows_Stack 		301
@@ -178,7 +179,8 @@ resource rMenu (base+editMenu) {
       base+edit_Copy,
       base+edit_Paste,
       base+edit_Clear,
-      base+edit_SelectAll
+      base+edit_SelectAll,
+      base+edit_ShowClipboard
       };
    };
 resource rPString (base+editMenu, noCrossBank)   {"  Edit  "};
@@ -414,10 +416,19 @@ resource rMenuItem (base+edit_SelectAll) {
    edit_SelectAll,
    "A","a",
    0,
-   refIsResource*itemTitleRefShift,
+   refIsResource*itemTitleRefShift + fDivider,
    base+edit_SelectAll
    };
 resource rPString (base+edit_SelectAll, noCrossBank)  {"Select All"};
+
+resource rMenuItem (base+edit_ShowClipboard) {
+   edit_ShowClipboard,
+   "","",
+   0,
+   refIsResource*itemTitleRefShift,
+   base+edit_ShowClipboard
+   };
+resource rPString (base+edit_ShowClipboard, noCrossBank)  {"Show Clipboard"};
 
 resource rMenuItem (base+windows_Tile) {
    windows_Tile,

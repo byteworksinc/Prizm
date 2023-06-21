@@ -117,7 +117,7 @@ oldMask	ds	2	old state and mask
 menuFlags anop		state flags for full menus
 	dc	b'0111 0111'	appleMenu
 	dc	b'0111 0111'	fileMenu
-	dc	b'0110 0101'	editMenu
+	dc	b'0111 0111'	editMenu
 	dc	b'0111 1111'	windowsMenu
 	dc	b'0110 0001'	findMenu
 	dc	b'0111 0111'	extrasMenu
@@ -144,6 +144,7 @@ itemFlags anop		state flags for menu items
 	dc	b'0110 0101',i'253'	edit_Paste
 	dc	b'0100 0101',i'254'	edit_Clear
 	dc	b'0110 0001',i'285'	edit_SelectAll
+	dc	b'0111 0111',i'286'	edit_ShowClipboard
 
 	dc	b'0110 0001',i'300'	windows_Tile
 	dc	b'0110 0001',i'301'	windows_Stack

@@ -47,6 +47,7 @@ const
    edit_Paste			= 253;
    edit_Clear			= 254;
    edit_SelectAll		= 285;
+   edit_ShowClipboard		= 286;
 
    windows_Tile			= 300;
    windows_Stack 		= 301;

@@ -988,7 +988,6 @@ const
    keyPad	 = $2000;
 
 var
-   dPtr: grafPortPtr;			{dialog grafPortPtr (from DialogSelect)}
    elapsed: longint;			{# hearbeats since last blink}
    fw: grafPortPtr;			{front window work pointer}
    i: integer;				{loop variable}
@@ -2017,6 +2016,7 @@ var
 			DrawScreen;
 			end;
       edit_SelectAll:	SelectAll;
+      edit_ShowClipboard: port := ShowClipboard(cpOpenWindow, nil);
 
       find_Find:	DoFind;
       find_FindSame:	begin
