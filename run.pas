@@ -626,10 +626,10 @@ if vrPtr <> nil then begin
       GetPortRect(r);			{erase the old contents}
       EraseRect(r);
       DrawContent;
-      DrawControls(vrPtr);
       end {if}
    else if status <> go then		{draw the variables}
       DrawContent;
+   DrawControls(vrPtr);
    end; {if}
 end; {DrawVariables}
 
