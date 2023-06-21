@@ -132,9 +132,9 @@ if frWPtr <> nil then begin		{if the replace window is open, close it}
 					{create the find dialog}
 dlgPtr := NewWindow2(nil, 0, @DrawControlWindow, nil, $02, base+resID, rWindParam1);
 if dlgPtr <> nil then begin
-   SetCtlValue(ord(isWholeWord), GetCtlHandleFromID(dlgPtr, dlgWholeWord));
-   SetCtlValue(ord(isCaseSensitive), GetCtlHandleFromID(dlgPtr, dlgCase));
-   SetCtlValue(ord(isFoldWhiteSpace), GetCtlHandleFromID(dlgPtr, dlgWhite));
+   SetCtlValueByID(ord(isWholeWord), dlgPtr, dlgWholeWord);
+   SetCtlValueByID(ord(isCaseSensitive), dlgPtr, dlgCase);
+   SetCtlValueByID(ord(isFoldWhiteSpace), dlgPtr, dlgWhite);
    SetLETextByID(dlgPtr, dlgFindPatt, findPatt);
    ResetCursor;
    repeat
@@ -142,9 +142,9 @@ if dlgPtr <> nil then begin
    until part in [dlgFindNext, dlgCancel];
    ResetCursor;
    if part = dlgFindNext then begin
-      isWholeWord := 0 <> GetCtlValue(GetCtlHandleFromID(dlgPtr, dlgWholeWord));
-      isCaseSensitive := 0 <> GetCtlValue(GetCtlHandleFromID(dlgPtr, dlgCase));
-      isFoldWhiteSpace := 0 <> GetCtlValue(GetCtlHandleFromID(dlgPtr, dlgWhite));
+      isWholeWord := 0 <> GetCtlValueByID(dlgPtr, dlgWholeWord);
+      isCaseSensitive := 0 <> GetCtlValueByID(dlgPtr, dlgCase);
+      isFoldWhiteSpace := 0 <> GetCtlValueByID(dlgPtr, dlgWhite);
       GetLETextByID2(dlgPtr, dlgFindPatt, findPatt);
       CloseWindow(dlgPtr);
       DrawControls(FrontWindow);
@@ -219,9 +219,9 @@ begin {DoReplace}
 if frWPtr = nil then begin
    frWPtr :=
       NewWindow2(nil, 0, @DrawControlWindow, nil, $02, base+resID, rWindParam1);
-   SetCtlValue(ord(isWholeWord), GetCtlHandleFromID(frWPtr, rplWholeWord));
-   SetCtlValue(ord(isCaseSensitive), GetCtlHandleFromID(frWPtr, rplCase));
-   SetCtlValue(ord(isFoldWhiteSpace), GetCtlHandleFromID(frWPtr, rplWhite));
+   SetCtlValueByID(ord(isWholeWord), frWPtr, rplWholeWord);
+   SetCtlValueByID(ord(isCaseSensitive), frWPtr, rplCase);
+   SetCtlValueByID(ord(isFoldWhiteSpace), frWPtr, rplWhite);
    SetLETextByID(frWPtr, rplFindPatt, findPatt);
    SetLETextByID(frWPtr, rplReplacePatt, replacePatt);
    SetLETextByID(frWPtr, rplFindPatt, findPatt);
@@ -242,9 +242,9 @@ procedure HandleReplaceEvent {event: eventRecord};
    { Read the state of the controls				}
 
    begin {ReadControls}
-   isWholeWord := 0 <> GetCtlValue(GetCtlHandleFromID(frWPtr, rplWholeWord));
-   isCaseSensitive := 0 <> GetCtlValue(GetCtlHandleFromID(frWPtr, rplCase));
-   isFoldWhiteSpace := 0 <> GetCtlValue(GetCtlHandleFromID(frWPtr, rplWhite));
+   isWholeWord := 0 <> GetCtlValueByID(frWPtr, rplWholeWord);
+   isCaseSensitive := 0 <> GetCtlValueByID(frWPtr, rplCase);
+   isFoldWhiteSpace := 0 <> GetCtlValueByID(frWPtr, rplWhite);
    GetLETextByID2(frWPtr, rplFindPatt, findPatt);
    GetLETextByID2(frWPtr, rplReplacePatt, replacePatt);
    end; {ReadControls}

@@ -2572,10 +2572,10 @@ var
    SetPrefixGS(spRec);
    if ToolError <> 0 then
       FlagError(5, ToolError);
-   compileList := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, cmpCheck1));
-   compileSymbol := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, cmpCheck2));
-   compileDebug := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, cmpCheck3));
-   compileLink := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, cmpCheck4));
+   compileList := 0 <> GetCtlValueByID(gtPtr, cmpCheck1);
+   compileSymbol := 0 <> GetCtlValueByID(gtPtr, cmpCheck2);
+   compileDebug := 0 <> GetCtlValueByID(gtPtr, cmpCheck3);
+   compileLink := 0 <> GetCtlValueByID(gtPtr, cmpCheck4);
    end; {SetOptions}
 
 
@@ -2627,10 +2627,10 @@ var
 begin {DoCompile2}
 gtPtr := NewWindow2(nil, 0, @DrawControlWindow, nil, $02, base+resID, rWindParam1);
 if gtPtr <> nil then begin
-   SetCtlValue(ord(compileList), GetCtlHandleFromID(gtPtr, cmpCheck1));
-   SetCtlValue(ord(compileSymbol), GetCtlHandleFromID(gtPtr, cmpCheck2));
-   SetCtlValue(ord(compileDebug), GetCtlHandleFromID(gtPtr, cmpCheck3));
-   SetCtlValue(ord(compileLink), GetCtlHandleFromID(gtPtr, cmpCheck4));
+   SetCtlValueByID(ord(compileList), gtPtr, cmpCheck1);
+   SetCtlValueByID(ord(compileSymbol), gtPtr, cmpCheck2);
+   SetCtlValueByID(ord(compileDebug), gtPtr, cmpCheck3);
+   SetCtlValueByID(ord(compileLink), gtPtr, cmpCheck4);
    gpRec.pcount := 2;
    gpRec.prefixNum := 16;
    gpRec.prefix := @osStr;
@@ -2734,11 +2734,11 @@ begin {DoExecuteOptions}
 gtPtr := NewWindow2(nil, 0, @DrawControlWindow, nil, $02, base+resID, rWindParam1);
 if gtPtr <> nil then begin
    if executeMode = step then
-      SetCtlValue(1, GetCtlHandleFromID(gtPtr, excStep))
+      SetCtlValueByID(1, gtPtr, excStep)
    else if executeMode = trace then
-      SetCtlValue(1, GetCtlHandleFromID(gtPtr, excTrace))
+      SetCtlValueByID(1, gtPtr, excTrace)
    else
-      SetCtlValue(1, GetCtlHandleFromID(gtPtr, excGo));
+      SetCtlValueByID(1, gtPtr, excGo);
    SetLETextByID(gtPtr, excLinePatt, executeCommandLine);
    ResetCursor;
    repeat
@@ -2748,9 +2748,9 @@ if gtPtr <> nil then begin
 
    if part = excOK then begin
       GetLETextByID(gtPtr, excLinePatt, executeCommandLine);
-      if GetCtlValue(GetCtlHandleFromID(gtPtr, excStep)) <> 0 then
+      if GetCtlValueByID(gtPtr, excStep) <> 0 then
          executeMode := step
-      else if GetCtlValue(GetCtlHandleFromID(gtPtr, excTrace)) <> 0 then
+      else if GetCtlValueByID(gtPtr, excTrace) <> 0 then
          executeMode := trace
       else
          executeMode := go;
@@ -2831,18 +2831,18 @@ var
    SetPrefixGS(spRec);
    if ToolError <> 0 then
       FlagError(7, ToolError);
-   linkList := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck1));
-   linkSymbol := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck2));
-   linkExecute := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck3));
-   linkSave := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck4));
-   gsosAware := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck5));
-   messageAware := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck6));
-   deskAware := 0 <> GetCtlValue(GetCtlHandleFromID(gtPtr, lnkCheck7));
-   if GetCtlValue(GetCtlHandleFromID(gtPtr, lnkRadio1)) <> 0 then
+   linkList := 0 <> GetCtlValueByID(gtPtr, lnkCheck1);
+   linkSymbol := 0 <> GetCtlValueByID(gtPtr, lnkCheck2);
+   linkExecute := 0 <> GetCtlValueByID(gtPtr, lnkCheck3);
+   linkSave := 0 <> GetCtlValueByID(gtPtr, lnkCheck4);
+   gsosAware := 0 <> GetCtlValueByID(gtPtr, lnkCheck5);
+   messageAware := 0 <> GetCtlValueByID(gtPtr, lnkCheck6);
+   deskAware := 0 <> GetCtlValueByID(gtPtr, lnkCheck7);
+   if GetCtlValueByID(gtPtr, lnkRadio1) <> 0 then
       fileKind := kEXE
-   else if GetCtlValue(GetCtlHandleFromID(gtPtr, lnkRadio2)) <> 0 then
+   else if GetCtlValueByID(gtPtr, lnkRadio2) <> 0 then
       fileKind := kS16
-   else if GetCtlValue(GetCtlHandleFromID(gtPtr, lnkRadio3)) <> 0 then
+   else if GetCtlValueByID(gtPtr, lnkRadio3) <> 0 then
       fileKind := kCDA
    else
       fileKind := kNDA;
@@ -2911,22 +2911,22 @@ var
       hilite := 0
    else
       hilite := 255;
-   HiliteControl(hilite, GetCtlHandleFromID(gtPtr, lnkCheck5));
-   HiliteControl(hilite, GetCtlHandleFromID(gtPtr, lnkCheck6));
-   HiliteControl(hilite, GetCtlHandleFromID(gtPtr, lnkCheck7));
+   HiliteCtlByID(hilite, gtPtr, lnkCheck5);
+   HiliteCtlByID(hilite, gtPtr, lnkCheck6);
+   HiliteCtlByID(hilite, gtPtr, lnkCheck7);
    end; {EnableChecks}
 
 
 begin {DoLink}
 gtPtr := NewWindow2(nil, 0, @DrawControlWindow, nil, $02, base+resID, rWindParam1);
 if gtPtr <> nil then begin
-   SetCtlValue(ord(linkList), GetCtlHandleFromID(gtPtr, lnkCheck1));
-   SetCtlValue(ord(linkSymbol), GetCtlHandleFromID(gtPtr, lnkCheck2));
-   SetCtlValue(ord(linkExecute), GetCtlHandleFromID(gtPtr, lnkCheck3));
-   SetCtlValue(ord(linkSave), GetCtlHandleFromID(gtPtr, lnkCheck4));
-   SetCtlValue(ord(gsosAware), GetCtlHandleFromID(gtPtr, lnkCheck5));
-   SetCtlValue(ord(messageAware), GetCtlHandleFromID(gtPtr, lnkCheck6));
-   SetCtlValue(ord(deskAware), GetCtlHandleFromID(gtPtr, lnkCheck7));
+   SetCtlValueByID(ord(linkList), gtPtr, lnkCheck1);
+   SetCtlValueByID(ord(linkSymbol), gtPtr, lnkCheck2);
+   SetCtlValueByID(ord(linkExecute), gtPtr, lnkCheck3);
+   SetCtlValueByID(ord(linkSave), gtPtr, lnkCheck4);
+   SetCtlValueByID(ord(gsosAware), gtPtr, lnkCheck5);
+   SetCtlValueByID(ord(messageAware), gtPtr, lnkCheck6);
+   SetCtlValueByID(ord(deskAware), gtPtr, lnkCheck7);
    EnableChecks(fileKind);
    case fileKind of
       kS16: lnkRadio := lnkRadio2;
@@ -2934,7 +2934,7 @@ if gtPtr <> nil then begin
       kNDA: lnkRadio := lnkRadio4;
       otherwise: lnkRadio := lnkRadio1;
       end; {case}
-   SetCtlValue(1, GetCtlHandleFromID(gtPtr, lnkRadio));
+   SetCtlValueByID(1, gtPtr, lnkRadio);
    gpRec.pcount := 2;
    gpRec.prefixNum := 13;
    gpRec.prefix := @osStr;
