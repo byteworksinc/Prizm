@@ -90,22 +90,22 @@
 resource rToolStartup(base+1) {
    mode640,
    {
-       3, $0302,                        /* Misc Tool */
-       4, $0307,                        /* QuickDraw II */
+       3, $0303,                        /* Misc Tool */
+       4, $0308,                        /* QuickDraw II */
        5, $0304,                        /* Desk Manager */
-       6, $0301,                        /* Event Manager */
-      11, $0300,                        /* Integer Math Tool Set */
-      14, $0303,                        /* Window Manager */
-      15, $0303,                        /* Menu Manager */
-      16, $0303,                        /* Control Manager */
-      18, $0304,                        /* QuickDraw II Auxiliary */
-      19, $0301,                        /* Print Manager */
-      20, $0303,                        /* LineEdit Tool Set */
-      21, $0304,                        /* Dialog Manager */
-      22, $0301,                        /* Scrap Manager */
-      23, $0303,                        /* SFO */
-      27, $0303,                        /* Font Manager */
-      28, $0303,                        /* List Manager */
+       6, $0302,                        /* Event Manager */
+      11, $0301,                        /* Integer Math Tool Set */
+      14, $0304,                        /* Window Manager */
+      15, $0304,                        /* Menu Manager */
+      16, $0304,                        /* Control Manager */
+      18, $0305,                        /* QuickDraw II Auxiliary */
+      19, $0302,                        /* Print Manager */
+      20, $0304,                        /* LineEdit Tool Set */
+      21, $0305,                        /* Dialog Manager */
+      22, $0302,                        /* Scrap Manager */
+      23, $0304,                        /* SFO */
+      27, $0304,                        /* Font Manager */
+      28, $0304,                        /* List Manager */
       }
    };
 
