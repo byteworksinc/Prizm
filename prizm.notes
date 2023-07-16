@@ -10,6 +10,8 @@ Updated 2023
 
 	    3.	The variables window can now display extended and comp values.
 
+	    4.	PRIZM now requires System 6.0.1 or later.
+
 2.1	    1.	Bugs have been fixed.  See the bug fix notes, below.
 
             2.  Support has been added for international characters.  See
@@ -38,6 +40,8 @@ Extended Characters
 PRIZM now supports the full extended character set, and most ORCA languages do, too.  For details concerning language support, see the documentation for the individual languages.
 
 Extended characters can be entered in any editable file and in the find and replace dialogs.  They are generally entered using the option key in conjunction with some other key.  To see the complete extended character set, as well as a table showing how to enter the characters from the U.S. English keyboard, load the file "FontTest" from PRIZM.
+
+To support extended characters, the special characters that PRIZM uses to indicate break points and auto-go points have been changed, and a new flag is used in the SysTabs file to reflect this.  If the seventh character in the flags line for a language is 1, that indicates that the newer debugging characters should be used; if it is 0, the older characters will still be used.  This flag should be set to 1 for languages that have been updated to support extended characters, and 0 for those that have not.
 
 Command Line Editing
 --------------------
