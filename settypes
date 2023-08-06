@@ -1,0 +1,14 @@
+filetype -p =.asm src; change -p =.asm asm65816
+filetype -p =.macros src; change -p =.macros asm65816
+filetype -p =.smac src; change -p =.smac asm65816
+filetype -p =.pas src; change -p =.pas pascal
+filetype prism.rez src; change prism.rez rez
+filetype backup src; change backup exec
+filetype count src; change count exec
+filetype linkit src; change linkit exec
+filetype make src; change make exec
+filetype settypes src; change settypes exec
+filetype fonttest txt
+filetype prizm.notes txt
+filetype LICENSE txt
+filetype obj:README.txt txt
