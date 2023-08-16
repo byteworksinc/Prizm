@@ -590,7 +590,7 @@ var
 	       b1: if bytePtr(addr)^ = 0 then str^ := 'false' else str^ := 'true';
 	       p4,ptr4: begin
 		  str^ := '';
-		  l := ord4(addr);
+		  l := longintPtr(addr)^;
 		  Hex(str^,l>>24);
 		  Hex(str^,l>>16);
 		  Hex(str^,l>>8);
