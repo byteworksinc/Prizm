@@ -820,6 +820,7 @@ procedure EvaluateCell (cell: varPtr; proc: procInfoPtr; flagErrors: boolean);
 
 var
    ap,ape: entryArrayPtr;		{for trapsing thru symbol table}
+   derefs: unsigned;			{number of dereference levels due to *s}
    done: boolean;			{loop termination test}
    i: unsigned;				{loop/index variable}
    name: pStringPtr;			{function name}
@@ -1061,9 +1062,14 @@ var
 	 '^':	PointerRef;
 	 '.':	FieldRef;
 	 '-':	PointerFieldRef;
-	 otherwise:	CheckFinal;
+	 otherwise:	;
          end; {case}
    until not recycle;
+   while derefs <> 0 do begin		{do dereferences based on leading *s}
+      PointerRef;
+      derefs := derefs - 1;
+      end; {while}
+   CheckFinal;
    end; {Reference}
 
 
@@ -1083,6 +1089,11 @@ repeat
    if not done then
       Delete(str^, i, 1);
 until done;
+derefs := 0;				{handle any leading * characters}
+while str^[1] = '*' do begin
+   derefs := derefs + 1;
+   Delete(str^, 1, 1);
+   end;
 GetName(name, str);			{separate the name from any references}
 with proc^ do begin
    ap := symbols;			{find the proper variable}
