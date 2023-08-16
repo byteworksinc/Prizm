@@ -1072,7 +1072,7 @@ new(name);				{allocate string buffers}
 new(str);
 while cell^.ref <> nil do begin		{dispose of old dereference list}
    ref := cell^.ref;
-   cell^.ref := ref;
+   cell^.ref := ref^.next;
    dispose(ref);
    end; {while}
 cell^.vf := bad;			{assume a bad expression}

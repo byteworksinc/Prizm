@@ -1,8 +1,10 @@
-PRIZM 2.1.1
+PRIZM 2.1.2 D1
 Copyright 1996, Byte Works Inc.
 Updated 2023
 
 -- Change List --------------------------------------------------------------
+
+2.1.2 D1    1.	Bugs have been fixed.  See the bug fix notes, below.
 
 2.1.1	    1.	Bugs have been fixed.  See the bug fix notes, below.
 
@@ -80,6 +82,10 @@ it is safe to use the command
 and only the editable file will be opened.
 
 The only limit to the number of files that can be opened is available memory.
+
+-- Bugs from PRIZM 2.1.1 that have been fixed -------------------------------
+
+1.  PRIZM could hang when editing an expression in the variables window that contained a pointer dereference.
 
 -- Bugs from PRIZM 2.1.0 that have been fixed -------------------------------
 
