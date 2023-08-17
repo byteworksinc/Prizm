@@ -92,6 +92,8 @@ The only limit to the number of files that can be opened is available memory.
 
 2.  The variables window would show incorrect values for pointers.  (The value shown was the address of the pointer variable rather than its value.)
 
+3.  The variables window sometimes showed incorrect values for local variables.  (This could occur if the current direct page address was $8000 or higher.)
+
 -- Bugs from PRIZM 2.1.0 that have been fixed -------------------------------
 
 1.  Text in PRIZM windows could become corrupted if a system extension that intercepts normal screen drawing was installed.  This includes CloseView, the screen magnification tool included with the system software.  PRIZM can now work with system extensions like CloseView, but be aware that there is a performance penalty associated with them.  Also, debugging of desktop programs may not work properly while the screen is magnified with CloseView.

@@ -1110,7 +1110,7 @@ repeat
    else if NamesEqual(ap^.name^, name^) then	begin
       done := true;			{fount it...}
       if ap^.longAddr = 0 then	{set up the address}
-	 cell^.addr := pointer(proc^.DP+ord4(ap^.value))
+	 cell^.addr := pointer((proc^.DP & $0000FFFF) + ord4(ap^.value))
       else
 	 cell^.addr := pointer(ap^.value);
 					{dereference the address}
@@ -3080,7 +3080,7 @@ var
 	 expr^ := ap^.name^;
 	 vf := varFormats(ord(ap^.format)); {set the variable format}
 	 if ap^.longAddr = 0 then	{set up the address}
-	    addr := pointer(currentProc^.DP+ord4(ap^.value))
+	    addr := pointer((currentProc^.DP & $0000FFFF) + ord4(ap^.value))
 	 else
 	    addr := pointer(ap^.value);
          ref := nil;
