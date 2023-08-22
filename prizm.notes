@@ -94,6 +94,10 @@ The only limit to the number of files that can be opened is available memory.
 
 3.  The variables window sometimes showed incorrect values for local variables.  (This could occur if the current direct page address was $8000 or higher.)
 
+4.  The fields of an object could not be shown in the variables window.
+
+5.  If you pressed the star button in the variables window when debugging a procedure that contained an object variable, it could create entries for nonexistent variables with the names of the object's fields.
+
 -- Bugs from PRIZM 2.1.0 that have been fixed -------------------------------
 
 1.  Text in PRIZM windows could become corrupted if a system extension that intercepts normal screen drawing was installed.  This includes CloseView, the screen magnification tool included with the system software.  PRIZM can now work with system extensions like CloseView, but be aware that there is a performance penalty associated with them.  Also, debugging of desktop programs may not work properly while the screen is magnified with CloseView.

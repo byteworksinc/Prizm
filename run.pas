@@ -799,7 +799,7 @@ else begin
    p := pointer(ord4(p) + (p^.numSubscripts+1)*sizeof(entryArray));
    if format = 11 then
       p := NextEntry(p)
-   else if format = 12 then begin
+   else if format in [12,14] then begin
       while p^.longAddr <> 0 do
          p := NextEntry(p);
       p := NextEntry(p);
@@ -959,6 +959,13 @@ var
          name: pStringPtr;		{field name}
 
       begin {FieldRef}
+      if format = 14 then begin		{handle object as pointer to record}
+         new(ref);
+         ref^.next := cell^.ref;
+         cell^.ref := ref;
+         ref^.offset := 0;
+         format := 12;
+         end; {if}
       if format <> 12 then begin
          if flagErrors then
             FlagError(30, 0);
