@@ -183,7 +183,7 @@ type
       end;
  
 					{base variable formats}
-   varFormats = (i1,i2,i4,r4,r8,r10,cStr,pStr,c1,b1,cp,p4,record1,derived,ptr4,bad);
+   varFormats = (i1,i2,i4,r4,r8,r10,cStr,pStr,c1,b1,cp,p4,record1,derived,ptr4,bad,addr4);
  
    refPtr = ^refRecord;			{for dereferencing addresses}
    refRecord = record
@@ -588,9 +588,12 @@ var
 	       pStr: str^ := pStringPtr(addr)^;
 	       c1: str^ := chr(charPtr(addr)^);
 	       b1: if bytePtr(addr)^ = 0 then str^ := 'false' else str^ := 'true';
-	       p4,ptr4: begin
+	       p4,ptr4,addr4: begin
 		  str^ := '';
-		  l := longintPtr(addr)^;
+		  if vp^.vf = addr4 then
+		     l := ord4(addr)
+		  else
+		     l := longintPtr(addr)^;
 		  Hex(str^,l>>24);
 		  Hex(str^,l>>16);
 		  Hex(str^,l>>8);
@@ -825,6 +828,7 @@ var
    i: unsigned;				{loop/index variable}
    name: pStringPtr;			{function name}
    ref,ref2: refPtr;			{work reference pointers}
+   showaddr: boolean;			{show variable address (not value)}
    str: pStringPtr;			{expression string}
 
 
@@ -937,8 +941,9 @@ var
 
       begin {CheckFinal}
       if format & $003F = ord(record1) then begin
-         if flagErrors then
-            FlagError(32, 0);
+         if not showaddr then
+            if flagErrors then
+               FlagError(32, 0);
          end {if}
       else if subscripts <> 0 then begin
          if flagErrors then
@@ -1096,6 +1101,11 @@ repeat
    if not done then
       Delete(str^, i, 1);
 until done;
+showaddr := false;                      {handle leading & or @ (for address)}
+if str^[1] in ['&','@'] then begin
+   showaddr := true;
+   Delete(str^, 1, 1);
+   end; {if}
 derefs := 0;				{handle any leading * characters}
 while str^[1] = '*' do begin
    derefs := derefs + 1;
@@ -1126,6 +1136,8 @@ repeat
    else
       ap := NextEntry(ap);		{move to the next entry}
 until done; 
+if showaddr then
+   cell^.vf := addr4;
 ref := cell^.ref;			{reverse the reference list}
 if ref <> nil then begin
    cell^.ref := nil;
