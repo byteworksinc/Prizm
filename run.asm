@@ -426,9 +426,9 @@ lb4	add2	addr,#2	skip line number
 	sta	status	  end;
 
 lb5	cli		allow interupts
-	lda	ourMenu	if the application menu bar is active
+lb6	lda	ourMenu	if the application menu bar is active
 	bne	lb7	  then
-lb6	jsl	TestMouse	  check for switch
+	jsl	TestMouse	  check for switch
 	lsr	a
 	plx
 	bcs	lb8	  exit if mouse in step

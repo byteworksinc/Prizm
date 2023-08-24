@@ -103,6 +103,8 @@ The only limit to the number of files that can be opened is available memory.
 
 5.  If you pressed the star button in the variables window when debugging a procedure that contained an object variable, it could create entries for nonexistent variables with the names of the object's fields.
 
+6.  If you were debugging a desktop application in single-step mode and you switched from the application's menu bar to PRIZM's menu bar, you could not interact with PRIZM's menus or windows until you clicked the footprint icon.
+
 -- Bugs from PRIZM 2.1.0 that have been fixed -------------------------------
 
 1.  Text in PRIZM windows could become corrupted if a system extension that intercepts normal screen drawing was installed.  This includes CloseView, the screen magnification tool included with the system software.  PRIZM can now work with system extensions like CloseView, but be aware that there is a performance penalty associated with them.  Also, debugging of desktop programs may not work properly while the screen is magnified with CloseView.
