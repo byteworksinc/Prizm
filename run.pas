@@ -509,6 +509,7 @@ var
  
    var
       addr: longintPtr;			{effective address}
+      e: extended;			{work variable for FP values}
       i: integer;			{index variable}
       l: longint;			{work variable for forming ptr val}
       max: integer;			{max # of visible lines}
@@ -580,9 +581,16 @@ var
 	       r8: str^ := cnvrs(doublePtr(addr)^,1,0);
 	       r10: str^ := cnvrs(extendedPtr(addr)^,1,0);
 	       cp: begin
-	          str^ := cnvrs(compPtr(addr)^,1,1);
-	          if compPtr(addr)^ = compPtr(addr)^ then
-	             str^[0] := chr(ord(str^[0]) - 2);
+                  e := compPtr(addr)^;
+                  if (ord(vp^.vf) = $004a) then begin
+                     if e < 0 then
+                        e := e + 18446744073709551616.0
+                     else if e <> e then
+                        e := 9223372036854775808.0;
+                     end; {if}
+                  str^ := cnvrs(e,1,1);
+                  if e = e then
+                     str^[0] := chr(ord(str^[0]) - 2);
 	          end;
 	       cStr: str^ := cStringPtr(addr)^;
 	       pStr: str^ := pStringPtr(addr)^;
@@ -3139,7 +3147,7 @@ var
       end; {with}
    while ord4(ap) < ord4(ape) do begin
       if ap^.numSubscripts = 0 then
-         if ap^.format in [0..10,$40..$42] then
+         if ap^.format in [0..10,$40..$42,$4a] then
             if not EntryExists(ap) then
                AddEntry(ap);
       ap := NextEntry(ap);
