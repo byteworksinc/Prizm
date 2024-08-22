@@ -1,10 +1,10 @@
-PRIZM 2.1.2 D1
+PRIZM 2.1.2
 Copyright 1996, Byte Works Inc.
-Updated 2023
+Updated 2024
 
 -- Change List --------------------------------------------------------------
 
-2.1.2 D1    1.	Bugs have been fixed.  See the bug fix notes, below.
+2.1.2	    1.	Bugs have been fixed.  See the bug fix notes, below.
 
 	    2.	In the variables window, either a postfix ^ (as in Pascal) or
 		a prefix * (as in C) can now be used to dereference pointers.

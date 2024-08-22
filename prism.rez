@@ -117,13 +117,13 @@ resource rVersion(1) {
       2,				/* Major revision */
       1,				/* Minor revision */
       2,				/* Bug version */
-      development,			/* Release stage */
-      1,				/* Non-final release # */
+      release,				/* Release stage */
+      0,				/* Non-final release # */
       },
    verUS,				/* Region code */
    "PRIZM",				/* Short version number */
    "Copyright 1996, Byte Works, Inc.\n"	/* Long version number */
-   "Updated 2023"
+   "Updated 2024"
    };
 
 /*- Menu Bar ---------------------------------------------------*/
@@ -842,9 +842,9 @@ resource rAlertString (base+3001) {
 
 resource rAlertString (base+3002) {
    "43/"
-   "Prizm 2.1.2 D1\n"
+   "Prizm 2.1.2\n"
    "Copyright 1988, 1991, 1993, 1996\n"
-   "Byte Works, Inc.  Updated 2023.\n"
+   "Byte Works, Inc.  Updated 2024.\n"
    "\n"
    "By Mike Westerfield"
    "/^#0\$00";
